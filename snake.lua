@@ -28,6 +28,21 @@ function Snake.new()
     return self
 end
 
+function Snake:death()
+    local collided = false
+    for _, tail_block in pairs(self.tail) do
+        if self.x == tail_block.x and self.y == tail_block.y then
+            collided = true
+            break
+        end
+    end
+
+    if collided then
+        self.total = 0
+        self.tail = {}
+    end
+end
+
 function Snake:eat(food)
     if self.x == food.x and self.y == food.y then
         self.total = self.total + 1

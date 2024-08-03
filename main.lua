@@ -43,6 +43,8 @@ function love.update(dt)
         snake:handleInput()
     end
 
+    snake:death()
+
     if snake:eat(food) then
         food:changeLocation()
     end
