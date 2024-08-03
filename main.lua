@@ -3,8 +3,8 @@ local push = require('vendor.push')
 local Snake = require('snake')
 local Food = require('food')
 
-GAME_WIDTH = 432
-GAME_HEIGHT = 243
+GAME_WIDTH = 61
+GAME_HEIGHT = 41
 
 local snake = Snake.new()
 local food = Food.new()
@@ -14,7 +14,7 @@ function love.load()
 
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
-    push:setupScreen(GAME_WIDTH, GAME_HEIGHT, 1280, 720, {
+    push:setupScreen(GAME_WIDTH, GAME_HEIGHT, 1074, 720, {
         fullscreen = false,
         resizable = true,
         vsync = true
@@ -32,11 +32,21 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
+    snake:handleInput()
+
+    -- set fps to 10
+    -- track input while that happens
+    local start = love.timer.getTime()
+    local toSleep = math.max(0, 1 / 6 - dt)
+
+    while love.timer.getTime() - start < toSleep do
+        snake:handleInput()
+    end
+
     if snake:eat(food) then
         food:changeLocation()
     end
-    snake:handleInput()
-    snake:update(dt)
+    snake:update()
 end
 
 function love.draw()

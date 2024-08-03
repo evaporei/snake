@@ -2,12 +2,12 @@ local Vector = require('vendor.vector')
 
 local Snake = {}
 
-SPEED = 80
+SPEED = 1
 
 SPEED_X = SPEED
 SPEED_Y = SPEED
 
-SIDE = 6
+SNAKE_SIDE = 1
 
 function Snake.new()
     local self = {}
@@ -18,8 +18,8 @@ function Snake.new()
     self.vx = SPEED_X
     self.vy = 0
 
-    self.width = SIDE
-    self.height = SIDE
+    self.width = SNAKE_SIDE
+    self.height = SNAKE_SIDE
 
     self.total = 0
     self.tail = {}
@@ -29,14 +29,11 @@ function Snake.new()
 end
 
 function Snake:eat(food)
-    if self.x > food.x + food.width or self.x + self.width < food.x then
-        return false
+    if self.x == food.x and self.y == food.y then
+        self.total = self.total + 1
+        return true
     end
-    if self.y > food.y + food.height or self.y + self.height < food.y then
-        return false
-    end
-    self.total = self.total + 1
-    return true
+    return false
 end
 
 function Snake:dir(x, y)
@@ -56,7 +53,7 @@ function Snake:handleInput()
     end
 end
 
-function Snake:update(dt)
+function Snake:update()
     for i = 1, #self.tail - 1 do
         self.tail[i] = self.tail[i+1]
     end
@@ -64,8 +61,10 @@ function Snake:update(dt)
         self.tail[self.total] = Vector.new(self.x, self.y)
     end
 
-    self.x = self.x + self.vx * dt
-    self.y = self.y + self.vy * dt
+    -- NO DELTA TIME MUAHAHA
+    -- COMMITING CRIMES HEHEHE
+    self.x = self.x + self.vx
+    self.y = self.y + self.vy
 end
 
 function Snake:render()
