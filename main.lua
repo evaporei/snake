@@ -1,11 +1,13 @@
 local push = require('vendor.push')
 
 local Snake = require('snake')
+local Food = require('food')
 
 GAME_WIDTH = 432
 GAME_HEIGHT = 243
 
 local snake = Snake.new()
+local food = Food.new()
 
 function love.load()
     love.window.setTitle('s n a k e')
@@ -30,6 +32,9 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
+    if snake:collides(food) then
+        food:changeLocation()
+    end
     snake:handleInput()
     snake:update(dt)
 end
@@ -40,6 +45,7 @@ function love.draw()
     love.graphics.clear(40/255, 45/255, 52/255, 255/255)
 
     snake:render()
+    food:render()
 
     push:finish()
 end

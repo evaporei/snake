@@ -21,6 +21,16 @@ function Snake.new()
     return self
 end
 
+function Snake:collides(food)
+    if self.x > food.x + food.width or self.x + self.width < food.x then
+        return false
+    end
+    if self.y > food.y + food.height or self.y + self.height < food.y then
+        return false
+    end
+    return true
+end
+
 function Snake:dir(x, y)
     self.vx = SPEED_X * x
     self.vy = SPEED_Y * y
@@ -44,6 +54,7 @@ function Snake:update(dt)
 end
 
 function Snake:render()
+    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end
 
