@@ -32,7 +32,7 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
-    if snake:collides(food) then
+    if snake:eat(food) then
         food:changeLocation()
     end
     snake:handleInput()

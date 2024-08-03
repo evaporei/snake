@@ -1,9 +1,13 @@
+local Vector = require('vendor.vector')
+
 local Snake = {}
 
 SPEED = 80
 
 SPEED_X = SPEED
 SPEED_Y = SPEED
+
+SIDE = 6
 
 function Snake.new()
     local self = {}
@@ -14,20 +18,24 @@ function Snake.new()
     self.vx = SPEED_X
     self.vy = 0
 
-    self.width = 6
-    self.height = 6
+    self.width = SIDE
+    self.height = SIDE
+
+    self.total = 0
+    self.tail = {}
 
     setmetatable(self, { __index = Snake })
     return self
 end
 
-function Snake:collides(food)
+function Snake:eat(food)
     if self.x > food.x + food.width or self.x + self.width < food.x then
         return false
     end
     if self.y > food.y + food.height or self.y + self.height < food.y then
         return false
     end
+    self.total = self.total + 1
     return true
 end
 
@@ -49,12 +57,24 @@ function Snake:handleInput()
 end
 
 function Snake:update(dt)
+    for i = 1, #self.tail - 1 do
+        self.tail[i] = self.tail[i+1]
+    end
+    if self.total > 0 then
+        self.tail[self.total] = Vector.new(self.x, self.y)
+    end
+
     self.x = self.x + self.vx * dt
     self.y = self.y + self.vy * dt
 end
 
 function Snake:render()
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+
+    for _, tail_part in pairs(self.tail) do
+        love.graphics.rectangle('fill', tail_part.x, tail_part.y, self.width, self.height)
+    end
+
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end
 
