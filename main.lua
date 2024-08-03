@@ -1,7 +1,11 @@
 local push = require('vendor.push')
 
+local Snake = require('snake')
+
 GAME_WIDTH = 432
 GAME_HEIGHT = 243
+
+local snake = Snake.new()
 
 function love.load()
     love.window.setTitle('s n a k e')
@@ -25,10 +29,17 @@ function love.keypressed(key)
     end
 end
 
+function love.update(dt)
+    snake:handleInput()
+    snake:update(dt)
+end
+
 function love.draw()
     push:start()
 
     love.graphics.clear(40/255, 45/255, 52/255, 255/255)
+
+    snake:render()
 
     push:finish()
 end
