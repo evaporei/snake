@@ -9,6 +9,21 @@ SPEED_Y = SPEED
 
 SNAKE_SIDE = 1
 
+local colors = {
+    -- white
+    { r = 255/255, g = 255/255, b = 255/255 },
+    -- orange
+    { r = 0xff/255, g = 0xa5/255, b = 0/255 },
+    -- yellow
+    { r = 0xfa/255, g = 0xeb/255, b = 0x36/255 },
+    -- green
+    { r = 0/255, g = 255/255, b = 0/255 },
+    -- blue
+    { r = 0/255, g = 0/255, b = 255/255 },
+    -- violet
+    { r = 0x70/255, g = 0x36/255, b = 0x9d/255 },
+}
+
 function Snake.new()
     local self = {}
 
@@ -85,9 +100,9 @@ function Snake:update()
 end
 
 function Snake:render()
-    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-
-    for _, body_part in pairs(self.body) do
+    for i, body_part in pairs(self.body) do
+        local color = colors[((i - 1) % #colors) + 1]
+        love.graphics.setColor(color.r, color.g, color.b, 255/255)
         love.graphics.rectangle('fill', body_part.x, body_part.y, self.width, self.height)
     end
 end
