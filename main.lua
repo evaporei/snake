@@ -1,13 +1,14 @@
 local push = require('vendor.push')
 
-local Snake = require('snake')
-local Food = require('food')
+local StateMachine = require('state_machine')
+local PlayScene = require('scenes.play')
 
 GAME_WIDTH = 61
 GAME_HEIGHT = 41
 
-local snake = Snake.new()
-local food = Food.new()
+local stateMachine = StateMachine.new({
+    ['play'] = PlayScene.new
+})
 
 function love.load()
     love.window.setTitle('s n a k e')
@@ -19,6 +20,8 @@ function love.load()
         resizable = true,
         vsync = true
     })
+
+    stateMachine:change('play')
 end
 
 function love.resize(w, h)
@@ -32,32 +35,13 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
-    snake:handleInput()
-
-    -- set fps to 10
-    -- track input while that happens
-    local start = love.timer.getTime()
-    local toSleep = math.max(0, 1 / 6 - dt)
-
-    while love.timer.getTime() - start < toSleep do
-        snake:handleInput()
-    end
-
-    snake:death()
-
-    if snake:eat(food) then
-        food:changeLocation()
-    end
-    snake:update()
+    stateMachine:update(dt)
 end
 
 function love.draw()
     push:start()
 
-    love.graphics.clear(40/255, 45/255, 52/255, 255/255)
-
-    snake:render()
-    food:render()
+    stateMachine:render()
 
     push:finish()
 end
