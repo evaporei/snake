@@ -95,8 +95,12 @@ function Snake:update()
 
     -- NO DELTA TIME MUAHAHA
     -- COMMITING CRIMES HEHEHE
-    self.body[1].x = self.body[1].x + self.vx
-    self.body[1].y = self.body[1].y + self.vy
+    local nextX = self.body[1].x + self.vx
+    local nextY = self.body[1].y + self.vy
+
+    -- modulo to wrap over screen
+    self.body[1].x = nextX % GAME_WIDTH
+    self.body[1].y = nextY % GAME_HEIGHT
 end
 
 function Snake:render()
